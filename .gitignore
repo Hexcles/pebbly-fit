@@ -1,0 +1,6 @@
+# Editor stuff
+.*.swp
+*~
+
+# Ignore build generated files
+build

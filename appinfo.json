@@ -1,0 +1,17 @@
+{
+  "uuid": "8da92a77-1b7e-4f7d-bc49-4ccab98d960b",
+  "shortName": "pebbly-fit",
+  "longName": "pebbly-fit",
+  "companyName": "pebbly",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}

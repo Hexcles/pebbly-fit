@@ -38,11 +38,13 @@ static void click_config_provider(void *context) {
 
 static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
-  GRect bounds = layer_get_bounds(window_layer);
-
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(text_layer, "Pebbly");
+  text_layer = text_layer_create(GRect(0, 55, 144, 50));
+  text_layer_set_background_color(text_layer, GColorClear);
+  text_layer_set_text_color(text_layer, GColorBlack);
+  text_layer_set_font(text_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
   text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
+  
+  text_layer_set_text(text_layer, "Pebbly");
   layer_add_child(window_layer, text_layer_get_layer(text_layer));
 }
 
@@ -58,7 +60,7 @@ static void init(void) {
     .unload = window_unload,
   });
   const bool animated = true;
-  window_stack_push(window, false);
+  window_stack_push(window, animated);
 
   app_worker_message_subscribe(worker_message_handler);
   AppWorkerResult result = app_worker_launch();

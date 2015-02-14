@@ -4,9 +4,11 @@
 #define TS 1
 
 static AppTimer *timer;
+static AppTimer *timer1;
 
 const int ACCEL_STEP_MS = 475;
 const int PED_ADJUST = 2;
+const int WAKEUP_INTERVAL = 10000;
 
 int X_DELTA = 45;
 int Y_DELTA, Z_DELTA = 235;
@@ -81,7 +83,6 @@ void resetUpdate() {
 }
 
 static void send_to_foreground() {
-	totalSteps += pedometerCount; 
 	AppWorkerMessage msg_data = {.data0 = totalSteps};
 	app_worker_send_message(TS, &msg_data);
 }
@@ -89,7 +90,7 @@ static void send_to_foreground() {
 void update_callback(){
 	if ((validX && validY) || (validX && validZ)) {
 		pedometerCount++;
-		send_to_foreground();
+		totalSteps += pedometerCount; 
 		pedometerCount = 0;
 	}
 	resetUpdate();
@@ -115,10 +116,19 @@ static void timer_callback(void *data) {
   timer = app_timer_register(ACCEL_STEP_MS, timer_callback, NULL);
 }
 
+static void timer_callback1(){
+	worker_launch_app();
+	psleep(1000);
+	send_to_foreground();
+
+	timer1 = app_timer_register(WAKEUP_INTERVAL, timer_callback1, NULL);
+}
+
 static void worker_init(){
 	totalSteps = 1;
 	accel_data_service_subscribe(0, NULL);
 	timer = app_timer_register(ACCEL_STEP_MS, timer_callback, NULL);
+	timer1 = app_timer_register(WAKEUP_INTERVAL, timer_callback1, NULL);
 }
 
 static void worker_deinit(){

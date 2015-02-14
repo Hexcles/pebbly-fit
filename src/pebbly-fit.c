@@ -3,17 +3,20 @@
 #define TS 1
 
 static Window *window;
-static TextLayer *text_layer;
+//static TextLayer *text_layer;
 
 static uint16_t s_worker_steps;
 
 static void worker_message_handler(uint16_t type, AppWorkerMessage *data) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "s_worker_steps");
   if (type == TS){
     s_worker_steps = data->data0;
     APP_LOG(APP_LOG_LEVEL_DEBUG, "s_worker_steps=%d", s_worker_steps);
+    
+    window_stack_pop_all(false);
   }
 }
-
+/**
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(text_layer, "Select");
 }
@@ -45,23 +48,24 @@ static void window_load(Window *window) {
 static void window_unload(Window *window) {
   text_layer_destroy(text_layer);
 }
-
+**/
 static void init(void) {
   window = window_create();
-  window_set_click_config_provider(window, click_config_provider);
+  /**window_set_click_config_provider(window, click_config_provider);
   window_set_window_handlers(window, (WindowHandlers) {
     .load = window_load,
     .unload = window_unload,
   });
-  const bool animated = true;
-  window_stack_push(window, animated);
+  const bool animated = true;**/
+  window_stack_push(window, false);
+
   app_worker_message_subscribe(worker_message_handler);
   AppWorkerResult result = app_worker_launch();
   APP_LOG(APP_LOG_LEVEL_DEBUG, "result=%d", result);
 }
 
 static void deinit(void) {
-  window_destroy(window);
+  //window_destroy(window);
   APP_LOG(APP_LOG_LEVEL_DEBUG, "deinit!");
   app_worker_message_unsubscribe();
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Google OAuth Callback</title>
+        <script type="text/javascript" src="https://robotshell.org/pebbly-fit/google_oauth.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+var CONFIG_URL = 'https://robotshell.org/pebbly-fit/configuration.html#';
+
+function next_page(msg) {
+    window.location.href = CONFIG_URL + msg;
+}
+
+function error(msg, code) {
+    var data = {'code': code, 'error': msg};
+    data = JSON.stringify(data);
+    next_page(data);
+}
+
+function get_token(code) {
+    var params = {
+        'code': code,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'redirect_uri': CALLBACK_URL,
+        'grant_type': 'authorization_code'
+    }
+    $.post(OAUTH_TOKEN_ENDPOINT, params, function(data) {
+        next_page(data);
+    }, 'text');
+}
+
+var queries = window.location.search;
+if (queries) {
+    // remove leading ?
+    queries = queries.substr(1);
+} else {
+    error('There was a problem communicating with Google. Please try again later.', -1);
+}
+
+var params = {};
+queries = queries.split('&');
+for (var i = 0; i != queries.length; i++) {
+    var pairs = queries[i].split('=');
+    params[decodeURIComponent(pairs[0])] = decodeURIComponent(pairs[1]);
+}
+
+if (params.code) {
+    get_token(params.code);
+} else {
+    error('You did not grant Pebbly Fit the access to your Google Fit.', -2);
+}
+        </script>
+    </head>
+    <body></body>
+</html>

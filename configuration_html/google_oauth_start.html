@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Google OAuth Start</title>
+        <script type="text/javascript" src="https://robotshell.org/pebbly-fit/google_oauth.js"></script>
+        <script type="text/javascript">
+var oauth_parmas = {
+    'response_type': 'code',
+    'client_id': CLIENT_ID,
+    'redirect_uri': CALLBACK_URL,
+    'scope': 'https://www.googleapis.com/auth/fitness.activity.write' + ' ' +
+        'https://www.googleapis.com/auth/fitness.location.write',
+    // essential in order to get refresh_token !
+    'approval_prompt': 'force',
+    'access_type': 'offline'
+}
+
+var redirect_to = OAUTH_ENDPOINT + '?';
+for (key in oauth_parmas) {
+    redirect_to += encodeURIComponent(key) + '=' + encodeURIComponent(oauth_parmas[key]) + '&';
+}
+
+window.location.href = redirect_to;
+        </script>
+    </head>
+    <body></body>
+</html>

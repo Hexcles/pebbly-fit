@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pebbly Fit Configurations</title>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script type="text/javascript">
+var GOOGLE_OAUTH_START = 'https://robotshell.org/pebbly-fit/google_oauth_start.html';
+var PEBBLE_JS_BACK = 'pebblejs://close#'
+
+var conf = window.location.hash;
+if (conf) {
+    conf = conf.substr(1);
+} else {
+    conf = '{}';
+}
+conf = JSON.parse(conf);
+
+$(document).ready(function() {
+    $('#google-oauth-start').click(function() {
+        window.location.href = GOOGLE_OAUTH_START;
+    });
+
+    $('#confirm').click(function() {
+        window.location.href = PEBBLE_JS_BACK +
+            JSON.stringify(conf);
+    });
+});
+        </script>
+    </head>
+    <body style="text-align: center">
+        <h1>Pebbly Fit</h1>
+        <h2>Configurations</h2>
+        <div>
+            <button id="google-oauth-start">Authorize!</button>
+            <button id="confirm">Confirm and Close</button>
+        </div>
+    </body>
+</html>
